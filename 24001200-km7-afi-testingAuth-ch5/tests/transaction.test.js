@@ -3,8 +3,8 @@ const app = require('../app');
 
 describe('Transaction Endpoints', () => {
   let transactionId;
-  const sourceAccountId = 1;
-  const destinationAccountId = 2;
+  const sourceAccountId = 9;
+  const destinationAccountId = 8;
 
   it('should create a new transaction between two accounts', async () => {
     const res = await request(app)
@@ -12,7 +12,7 @@ describe('Transaction Endpoints', () => {
       .send({
         sourceAccountId: sourceAccountId,
         destinationAccountId: destinationAccountId,
-        amount: 200,
+        amount: 100,
       });
 
     expect(res.statusCode).toBe(200);
