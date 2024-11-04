@@ -12,6 +12,10 @@ class TransactionControllers {
         return res.status(404).json({ error: 'Source or destination account not found' });
       }
 
+      if (amount < 10) {
+        return res.status(400).json({ error: 'Minimum amount is 10' })
+      }
+
       const transaction = await prisma.transaction.create({
         data: {
           sourceAccountId,
