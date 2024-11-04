@@ -3,7 +3,7 @@ const app = require('../app');
 
 describe('Account Endpoints', () => {
   let accountId;
-  const userId = 3;
+  const userId = 1;
 
   it('should create a new bank account for a user', async () => {
     const res = await request(app)
@@ -11,7 +11,7 @@ describe('Account Endpoints', () => {
       .send({
         userId: userId,
         bank_name: 'Bank BCA',
-        bank_account_number: '21893129',
+        bank_account_number: '21321321',
         balance: 100000000,
       });
 
@@ -19,6 +19,7 @@ describe('Account Endpoints', () => {
     expect(res.body).toHaveProperty('id');
     expect(res.body).toHaveProperty('userId', userId);
     expect(res.body).toHaveProperty('bank_name', 'Bank BCA');
+    expect(res.body).toHaveProperty('bank_account_number', '21321321')
     accountId = res.body.id;
   });
 
@@ -36,4 +37,25 @@ describe('Account Endpoints', () => {
       expect(res.body[0]).toHaveProperty('userId', userId);
     }
   });
+
+
+  // ----- Failure Cases ------
+
+
+  it('should not create a new bank account if bank account number is already taken', async () => {
+    const res = await request(app)
+      .post('/api/v1/accounts')
+      .send({
+        userId: userId,
+        bank_name: 'Bank BCA',
+        bank_account_number: '"213213"', // example of duplicate number
+        balance: 100000000,
+      });
+
+    expect(res.statusCode).toBe(400)
+    expect(res.body).toHaveProperty('error', 'Account number already exists');
+  });
+
+
+
 });
